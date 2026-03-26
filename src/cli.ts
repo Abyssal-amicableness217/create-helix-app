@@ -17,6 +17,7 @@ import {
 } from './validation.js';
 import { parseArgs } from './args.js';
 import { loadConfig, listProfiles, readEnvVars } from './config.js';
+import { detectOffline } from './network.js';
 import { runDoctor, formatDoctorOutput } from './doctor.js';
 import { showTemplateInfo } from './commands/info.js';
 import { auditDependencies } from './security/dep-audit.js';
@@ -304,6 +305,10 @@ async function collectFiles(dir: string): Promise<string[]> {
 export async function runCLI(): Promise<void> {
   const argv = process.argv.slice(2);
 
+  // Fire offline detection as early as possible so the probe runs in parallel
+  // with argument parsing, config loading, and other synchronous startup work.
+  const offlineDetectPromise = detectOffline(500);
+
   let parsed: ReturnType<typeof parseArgs>;
   try {
     parsed = parseArgs(argv);
@@ -332,6 +337,7 @@ export async function runCLI(): Promise<void> {
     noConfig,
     verbose: isVerboseFromArgs,
     skipAudit: isSkipAudit,
+    offline: isOfflineFlag,
     template: templateArgRaw,
     preset: presetArgFromCli,
     bundles: bundlesFromFlagRaw,
@@ -376,13 +382,15 @@ export async function runCLI(): Promise<void> {
   const presetArg = presetArgFromCli ?? envVars.preset ?? null;
   const outputDirArg = outputDirFromArgs ?? envVars.outputDir ?? null;
   const isVerbose = isVerboseFromArgs || (envVars.verbose ?? false);
-  const isNoInstall = isNoInstallFromArgs || (envVars.offline ?? false);
 
-  // Start version check early (non-blocking) for interactive mode only.
-  // We fire the promise here so the network request runs in parallel with the
-  // rest of CLI startup; we await the already-in-flight promise just before
-  // printing the final outro so startup is never delayed.
-  const isOffline = parsed.noInstall || (readEnvVars().offline ?? false);
+  // Determine offline state: --offline flag or HELIX_OFFLINE env var short-circuits
+  // the probe (no need to wait for a result we'll ignore). Otherwise await the
+  // already-in-flight detectOffline promise that was started at the top of runCLI.
+  const isOfflineFlagResolved = isOfflineFlag || (envVars.offline ?? false);
+  const detectedOffline = isOfflineFlagResolved ? false : await offlineDetectPromise;
+  const isOffline = isOfflineFlagResolved || detectedOffline;
+
+  const isNoInstall = isNoInstallFromArgs || isOffline;
   const updateCheckPromise: Promise<string | null> =
     !parsed.json && !isOffline
       ? checkForUpdate({ offline: isOffline, json: parsed.json })
@@ -405,7 +413,7 @@ export async function runCLI(): Promise<void> {
   }
 
   if (subcommand === 'doctor') {
-    const result = await runDoctor(HELIX_VERSION);
+    const result = await runDoctor(HELIX_VERSION, { offline: isOffline });
     if (isJson) {
       console.log(JSON.stringify(result, null, 2));
     } else {
@@ -416,7 +424,7 @@ export async function runCLI(): Promise<void> {
 
   if (subcommand === 'upgrade') {
     const { runUpgrade } = await import('./commands/upgrade.js');
-    await runUpgrade(process.cwd(), { dryRun: isDryRun });
+    await runUpgrade(process.cwd(), { dryRun: isDryRun, offline: isOffline });
     process.exit(0);
   }
 
@@ -453,6 +461,7 @@ export async function runCLI(): Promise<void> {
     --verbose               Show detailed scaffolding output (files created, config used)
     --json                  Output scaffold result as JSON (suppresses all TUI output)
     --skip-audit            Skip dependency vulnerability and license audit
+    --offline               Run in offline mode (skip network checks, use cached registry data)
     --version, -v           Print version and exit
     --help, -h              Show this help message and exit
 

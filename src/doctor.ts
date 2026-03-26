@@ -114,7 +114,11 @@ export function checkWritePermissions(): CheckResult {
  * backoff. Returns 'warn' (rather than throwing) after all retries are
  * exhausted so the doctor report can still complete.
  */
-export async function checkNetwork(): Promise<CheckResult> {
+export async function checkNetwork(offline = false): Promise<CheckResult> {
+  if (offline) {
+    return { name: 'Network', status: 'warn', message: 'skipped - offline' };
+  }
+
   const probe = (): Promise<void> =>
     new Promise<void>((resolve, reject) => {
       const req = https.get('https://registry.npmjs.org/', { timeout: 5000 }, (res) => {
@@ -143,7 +147,10 @@ export async function checkNetwork(): Promise<CheckResult> {
   }
 }
 
-export async function runDoctor(version: string): Promise<DoctorResult> {
+export async function runDoctor(
+  version: string,
+  options: { offline?: boolean } = {},
+): Promise<DoctorResult> {
   const checks: CheckResult[] = [];
 
   checks.push(checkNodeVersion());
@@ -151,7 +158,7 @@ export async function runDoctor(version: string): Promise<DoctorResult> {
   checks.push(checkGit());
   checks.push(checkDiskSpace());
   checks.push(checkWritePermissions());
-  checks.push(await checkNetwork());
+  checks.push(await checkNetwork(options.offline ?? false));
 
   const allPassed = checks.every((c) => c.status === 'ok');
 

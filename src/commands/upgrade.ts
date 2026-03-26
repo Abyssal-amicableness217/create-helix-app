@@ -4,6 +4,7 @@ import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { validateDirectory } from '../validation.js';
 import { withRetry } from '../retry.js';
+import { readRegistryCache, writeRegistryCache } from '../network.js';
 
 /** Prefixes that identify a HELiX project in package.json dependencies. */
 const HELIX_PREFIXES = ['@helix/', '@helixui/'] as const;
@@ -129,6 +130,7 @@ export function getInstalledVersions(dir: string): Record<string, string> {
 
 export interface UpgradeOptions {
   dryRun?: boolean;
+  offline?: boolean;
 }
 
 export interface UpgradePlan {
@@ -166,7 +168,7 @@ export function buildUpgradePlan(
  * writes updated versions back to package.json.
  */
 export async function runUpgrade(dir: string, options: UpgradeOptions = {}): Promise<void> {
-  const { dryRun = false } = options;
+  const { dryRun = false, offline = false } = options;
 
   // SECURITY: Validate the directory path before reading any files.
   // This prevents path traversal attacks when the directory argument is
@@ -188,20 +190,49 @@ export async function runUpgrade(dir: string, options: UpgradeOptions = {}): Pro
 
   const installed = getInstalledVersions(dir);
 
-  // Query the npm registry for the latest versions of all installed HELiX packages
-  const s = p.spinner();
-  s.start('Fetching latest versions from npm registry…');
-  const latestVersions = await fetchLatestVersions(Object.keys(installed));
-  s.stop('Fetched latest versions');
+  let latestVersions: Record<string, string>;
 
-  const fetchedCount = Object.keys(latestVersions).length;
-  const totalCount = Object.keys(installed).length;
-  if (totalCount > 0 && fetchedCount === 0) {
-    p.log.warn(
-      pc.yellow('Could not reach npm registry.') +
-        ' ' +
-        pc.dim('Showing installed versions only — upgrade check skipped.'),
-    );
+  if (offline) {
+    // Offline: skip registry fetch, use cached versions if available
+    const s = p.spinner();
+    s.start('Loading cached registry data…');
+    const cache = readRegistryCache();
+    s.stop('Loaded cached registry data');
+
+    if (cache !== null) {
+      latestVersions = cache.packages;
+      p.log.warn(
+        pc.yellow('Offline mode.') +
+          ' ' +
+          pc.dim('Using cached registry data from ' + new Date(cache.updatedAt).toLocaleString()),
+      );
+    } else {
+      latestVersions = {};
+      p.log.warn(
+        pc.yellow('Offline mode — no cache found.') +
+          ' ' +
+          pc.dim('Showing installed versions only — upgrade check skipped.'),
+      );
+    }
+  } else {
+    // Online: query the npm registry for the latest versions of all installed HELiX packages
+    const s = p.spinner();
+    s.start('Fetching latest versions from npm registry…');
+    latestVersions = await fetchLatestVersions(Object.keys(installed));
+    s.stop('Fetched latest versions');
+
+    const fetchedCount = Object.keys(latestVersions).length;
+    const totalCount = Object.keys(installed).length;
+    if (totalCount > 0 && fetchedCount === 0) {
+      p.log.warn(
+        pc.yellow('Could not reach npm registry.') +
+          ' ' +
+          pc.dim('Showing installed versions only — upgrade check skipped.'),
+      );
+    } else if (fetchedCount > 0) {
+      // Write successful fetch to registry cache for future offline use
+      writeRegistryCache(latestVersions);
+    }
   }
 
   const plan = buildUpgradePlan(installed, latestVersions);

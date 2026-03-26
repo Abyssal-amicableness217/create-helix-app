@@ -20,6 +20,7 @@ export interface ParsedArgs {
   noConfig: boolean;
   verbose: boolean;
   skipAudit: boolean;
+  offline: boolean;
   profile: string | null;
 
   // Template options
@@ -80,6 +81,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   const noConfig = argv.includes('--no-config');
   const verbose = argv.includes('--verbose');
   const skipAudit = argv.includes('--skip-audit');
+  const offline = argv.includes('--offline');
 
   // --profile
   const profileArgIndex = argv.indexOf('--profile');
@@ -157,6 +159,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
     noConfig,
     verbose,
     skipAudit,
+    offline,
     profile,
     template,
     preset,
