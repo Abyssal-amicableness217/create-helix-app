@@ -6,6 +6,8 @@ Scaffold a new project with [HELiX](https://github.com/bookedsolidtech/helix) en
 
 ```bash
 npx create-helix
+# or
+npm create helix
 ```
 
 Follow the interactive prompts to choose your framework, component bundles, and features.
