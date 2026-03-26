@@ -285,7 +285,9 @@ describe('loadCustomTemplates', () => {
 // ─── mergeWithCustomTemplates ─────────────────────────────────────────────────
 
 describe('mergeWithCustomTemplates', () => {
-  function makeCustom(partial: Partial<CustomTemplateConfig> & { id: string }): CustomTemplateConfig {
+  function makeCustom(
+    partial: Partial<CustomTemplateConfig> & { id: string },
+  ): CustomTemplateConfig {
     return {
       name: 'Test Template',
       description: 'A test template',

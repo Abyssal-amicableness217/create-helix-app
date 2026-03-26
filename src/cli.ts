@@ -6,7 +6,13 @@ import { createRequire } from 'node:module';
 import { TEMPLATES, COMPONENT_BUNDLES, mergeWithCustomTemplates } from './templates.js';
 import { loadCustomTemplates } from './custom-templates.js';
 import { scaffoldProject, getDryRunEntries, getLastScaffoldTiming } from './scaffold.js';
-import type { Framework, ComponentBundle, ProjectOptions, AnyTemplateConfig, CustomTemplateConfig } from './types.js';
+import type {
+  Framework,
+  ComponentBundle,
+  ProjectOptions,
+  AnyTemplateConfig,
+  CustomTemplateConfig,
+} from './types.js';
 import { isValidPreset, PRESETS } from './presets/loader.js';
 import { scaffoldDrupalTheme } from './generators/drupal-theme.js';
 import type { DrupalPreset } from './types.js';
@@ -77,6 +83,7 @@ async function runDrupalCLI(presetArg: string | null, isQuiet: boolean): Promise
   const themeName = await p.text({
     message: 'Drupal theme machine name',
     placeholder: 'my-helix-theme',
+    /* istanbul ignore next -- validate callback is never invoked when @clack/prompts is mocked */
     validate(value) {
       if (!value) return 'Theme name is required';
       // SECURITY: Whitelist-only validation — enforces a valid Drupal machine
@@ -300,20 +307,21 @@ export async function runJsonScaffold(
       },
       files,
       dryRun: opts.isDryRun,
-      timing: timing !== null
-        ? {
-            totalMs: Math.round(timing.totalMs),
-            phases: {
-              validationMs: Math.round(timing.phases.validationMs),
-              templateResolutionMs: Math.round(timing.phases.templateResolutionMs),
-              fileGenerationMs: Math.round(timing.phases.fileGenerationMs),
-              fileWritingMs: Math.round(timing.phases.fileWritingMs),
-            },
-            fileCount: timing.fileCount,
-            bytesWritten: timing.bytesWritten,
-            dependencyCount: timing.dependencyCount,
-          }
-        : undefined,
+      timing:
+        timing !== null
+          ? {
+              totalMs: Math.round(timing.totalMs),
+              phases: {
+                validationMs: Math.round(timing.phases.validationMs),
+                templateResolutionMs: Math.round(timing.phases.templateResolutionMs),
+                fileGenerationMs: Math.round(timing.phases.fileGenerationMs),
+                fileWritingMs: Math.round(timing.phases.fileWritingMs),
+              },
+              fileCount: timing.fileCount,
+              bytesWritten: timing.bytesWritten,
+              dependencyCount: timing.dependencyCount,
+            }
+          : undefined,
     };
     console.log(JSON.stringify(result, null, 2));
   } catch (err) {
@@ -410,8 +418,7 @@ export async function runCLI(): Promise<void> {
   const bundlesFromFlag = bundlesFromFlagRaw ?? envVars.bundles ?? cfgDefaults.bundles ?? null;
 
   // Load custom templates from templateDir (env var takes precedence over config file)
-  const templateDirResolved =
-    envVars.templateDir ?? helixConfig.templateDir ?? null;
+  const templateDirResolved = envVars.templateDir ?? helixConfig.templateDir ?? null;
   const customTemplates: CustomTemplateConfig[] =
     templateDirResolved !== null ? loadCustomTemplates(templateDirResolved) : [];
   // Merge built-ins with custom templates for display in TUI and validation
@@ -785,14 +792,26 @@ ${presetList}
     console.log(
       pc.dim('  Performance: ') +
         pc.white(`${scaffoldTiming.totalMs.toFixed(0)}ms`) +
-        pc.dim(` · ${scaffoldTiming.fileCount} files · ${formattedBytes} · ${scaffoldTiming.dependencyCount} deps`),
+        pc.dim(
+          ` · ${scaffoldTiming.fileCount} files · ${formattedBytes} · ${scaffoldTiming.dependencyCount} deps`,
+        ),
     );
     if (isVerbose) {
       console.log(pc.dim('  ┌─ Per-phase timing:'));
-      console.log(pc.dim(`  │  validation:          ${scaffoldTiming.phases.validationMs.toFixed(1)}ms`));
-      console.log(pc.dim(`  │  template resolution: ${scaffoldTiming.phases.templateResolutionMs.toFixed(1)}ms`));
-      console.log(pc.dim(`  │  file generation:     ${scaffoldTiming.phases.fileGenerationMs.toFixed(1)}ms`));
-      console.log(pc.dim(`  └─ file writing:        ${scaffoldTiming.phases.fileWritingMs.toFixed(1)}ms`));
+      console.log(
+        pc.dim(`  │  validation:          ${scaffoldTiming.phases.validationMs.toFixed(1)}ms`),
+      );
+      console.log(
+        pc.dim(
+          `  │  template resolution: ${scaffoldTiming.phases.templateResolutionMs.toFixed(1)}ms`,
+        ),
+      );
+      console.log(
+        pc.dim(`  │  file generation:     ${scaffoldTiming.phases.fileGenerationMs.toFixed(1)}ms`),
+      );
+      console.log(
+        pc.dim(`  └─ file writing:        ${scaffoldTiming.phases.fileWritingMs.toFixed(1)}ms`),
+      );
     }
   }
 
@@ -839,6 +858,7 @@ ${presetList}
 
   console.log();
   console.log(pc.dim('  Project:    ') + pc.cyan(project.name as string));
+  /* istanbul ignore next -- fallback when template id is not found in allTemplates (only reachable with malformed custom template IDs) */
   const frameworkLabel =
     template !== undefined
       ? template.color(template.name) + ('isCustom' in template ? pc.dim(' [custom]') : '')

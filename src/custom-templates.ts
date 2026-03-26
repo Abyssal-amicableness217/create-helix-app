@@ -22,10 +22,7 @@ interface RawCustomTemplate {
  * Validates a parsed JSON object and returns a fully-formed CustomTemplateConfig,
  * or null if any required field is missing or invalid.
  */
-function validateCustomTemplate(
-  raw: unknown,
-  filePath: string,
-): CustomTemplateConfig | null {
+function validateCustomTemplate(raw: unknown, filePath: string): CustomTemplateConfig | null {
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
     logger.warn(`Custom template at "${filePath}" is not a valid object — skipping`);
     return null;
@@ -39,9 +36,7 @@ function validateCustomTemplate(
   }
 
   if (typeof obj.name !== 'string' || obj.name.trim() === '') {
-    logger.warn(
-      `Custom template at "${filePath}" missing required string field "name" — skipping`,
-    );
+    logger.warn(`Custom template at "${filePath}" missing required string field "name" — skipping`);
     return null;
   }
 
@@ -53,9 +48,7 @@ function validateCustomTemplate(
   }
 
   if (typeof obj.hint !== 'string' || obj.hint.trim() === '') {
-    logger.warn(
-      `Custom template at "${filePath}" missing required string field "hint" — skipping`,
-    );
+    logger.warn(`Custom template at "${filePath}" missing required string field "hint" — skipping`);
     return null;
   }
 

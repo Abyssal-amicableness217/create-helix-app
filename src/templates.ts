@@ -1,6 +1,11 @@
 // @design-system-approved: CLI-001 Terminal colors (picocolors), not CSS values
 import pc from 'picocolors';
-import type { TemplateConfig, ComponentBundleConfig, AnyTemplateConfig, CustomTemplateConfig } from './types.js';
+import type {
+  TemplateConfig,
+  ComponentBundleConfig,
+  AnyTemplateConfig,
+  CustomTemplateConfig,
+} from './types.js';
 
 export const TEMPLATES: TemplateConfig[] = [
   {
