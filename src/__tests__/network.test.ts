@@ -28,7 +28,12 @@ vi.mock('node:fs', () => {
 
 import https from 'node:https';
 import fs from 'node:fs';
-import { detectOffline, readRegistryCache, writeRegistryCache, REGISTRY_CACHE_FILE } from '../network.js';
+import {
+  detectOffline,
+  readRegistryCache,
+  writeRegistryCache,
+  REGISTRY_CACHE_FILE,
+} from '../network.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
