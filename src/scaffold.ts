@@ -4,6 +4,7 @@ import pc from 'picocolors';
 import * as p from '@clack/prompts';
 import { getTemplate, getComponentsForBundles } from './templates.js';
 import type { ProjectOptions } from './types.js';
+import { logger } from './logger.js';
 
 // ---------------------------------------------------------------------------
 // SECURITY: HTML sanitization
@@ -171,7 +172,9 @@ function getScaffoldErrorMessage(err: unknown): string | null {
 
 export async function scaffoldProject(options: ProjectOptions): Promise<void> {
   const logVerbose = (msg: string): void => {
-    if (options.verbose) console.log(pc.dim(`  [verbose] ${msg}`));
+    if (options.verbose) {
+      logger.debug(msg);
+    }
   };
 
   const template = getTemplate(options.framework);
@@ -194,10 +197,10 @@ export async function scaffoldProject(options: ProjectOptions): Promise<void> {
     const entries = await fs.readdir(options.directory);
     if (entries.length > 0) {
       if (!options.force) {
-        console.error(`Error: Directory exists and is not empty: ${options.directory}`);
+        logger.error(`Directory exists and is not empty: ${options.directory}`);
         process.exit(1);
       }
-      console.warn(pc.yellow(`Warning: overwriting existing files in ${options.directory}`));
+      logger.warn(`Overwriting existing files in ${options.directory}`);
     }
   }
 

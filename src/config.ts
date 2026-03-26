@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import type { Framework, ComponentBundle, DrupalPreset } from './types.js';
+import { logger } from './logger.js';
 
 export interface HelixConfigDefaults {
   template?: Framework;
@@ -99,7 +100,7 @@ export function loadConfig(noConfig: boolean): LoadConfigResult {
     try {
       parsed = JSON.parse(raw);
     } catch {
-      console.warn(`Warning: .helixrc.json at "${candidate}" contains invalid JSON — skipping`);
+      logger.warn(`Warning: .helixrc.json at "${candidate}" contains invalid JSON — skipping`);
       return { config: {}, configFile: candidate };
     }
 
