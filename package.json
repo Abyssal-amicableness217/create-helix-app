@@ -3,6 +3,10 @@
   "version": "0.3.0",
   "description": "Scaffold a new project with HELiX web components — TUI-powered CLI",
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./api": "./dist/api.js"
+  },
   "bin": {
     "create-helix": "./dist/index.js"
   },
