@@ -179,38 +179,55 @@ jobs:
           node-version: 20
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm audit --audit-level=critical
+      - run: pnpm audit --audit-level=high
+
+  license-check:
+    name: License Compliance
+    needs: [secret-scan]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run license-check
 
   quality-gates:
     name: Quality Gates
     runs-on: ubuntu-latest
     timeout-minutes: 1
-    needs: [secret-scan, lint, format, type-check, test, build, audit, smoke-test]
+    needs: [secret-scan, lint, format, type-check, test, build, audit, license-check, smoke-test]
     if: always()
     steps:
       - name: Check all gates
         run: |
-          echo "Secret Scan: ${{ needs.secret-scan.result }}"
-          echo "Lint:        ${{ needs.lint.result }}"
-          echo "Format:      ${{ needs.format.result }}"
-          echo "Type Check:  ${{ needs.type-check.result }}"
-          echo "Test:        ${{ needs.test.result }}"
-          echo "Build:       ${{ needs.build.result }}"
-          echo "Audit:       ${{ needs.audit.result }}"
-          echo "Smoke Test:  ${{ needs.smoke-test.result }}"
+          echo "Secret Scan:     ${{ needs.secret-scan.result }}"
+          echo "Lint:            ${{ needs.lint.result }}"
+          echo "Format:          ${{ needs.format.result }}"
+          echo "Type Check:      ${{ needs.type-check.result }}"
+          echo "Test:            ${{ needs.test.result }}"
+          echo "Build:           ${{ needs.build.result }}"
+          echo "Audit:           ${{ needs.audit.result }}"
+          echo "License Check:   ${{ needs.license-check.result }}"
+          echo "Smoke Test:      ${{ needs.smoke-test.result }}"
 
           FAIL=0
-          for gate in secret-scan lint format type-check test build audit smoke-test; do
+          for gate in secret-scan lint format type-check test build audit license-check smoke-test; do
             result="skipped"
             case "$gate" in
-              secret-scan) result="${{ needs.secret-scan.result }}" ;;
-              lint)        result="${{ needs.lint.result }}" ;;
-              format)      result="${{ needs.format.result }}" ;;
-              type-check)  result="${{ needs.type-check.result }}" ;;
-              test)        result="${{ needs.test.result }}" ;;
-              build)       result="${{ needs.build.result }}" ;;
-              audit)       result="${{ needs.audit.result }}" ;;
-              smoke-test)  result="${{ needs.smoke-test.result }}" ;;
+              secret-scan)    result="${{ needs.secret-scan.result }}" ;;
+              lint)           result="${{ needs.lint.result }}" ;;
+              format)         result="${{ needs.format.result }}" ;;
+              type-check)     result="${{ needs.type-check.result }}" ;;
+              test)           result="${{ needs.test.result }}" ;;
+              build)          result="${{ needs.build.result }}" ;;
+              audit)          result="${{ needs.audit.result }}" ;;
+              license-check)  result="${{ needs.license-check.result }}" ;;
+              smoke-test)     result="${{ needs.smoke-test.result }}" ;;
             esac
             if [[ "$result" != "success" ]]; then
               echo "::error::Gate '$gate' did not succeed: $result"
