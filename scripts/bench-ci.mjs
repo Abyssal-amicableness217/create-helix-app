@@ -34,10 +34,7 @@ function getArg(flag, defaultValue) {
   return defaultValue;
 }
 
-const baselinePath = path.resolve(
-  ROOT,
-  getArg('--baseline', 'tests/benchmarks/baselines.json'),
-);
+const baselinePath = path.resolve(ROOT, getArg('--baseline', 'tests/benchmarks/baselines.json'));
 const resultsPath = path.resolve(ROOT, getArg('--results', 'bench-results.json'));
 
 const REGRESSION_THRESHOLD = 0.2; // 20%
@@ -53,7 +50,9 @@ if (!fs.existsSync(baselinePath)) {
 
 if (!fs.existsSync(resultsPath)) {
   console.warn(`[bench-ci] Results file not found: ${resultsPath} — skipping regression check`);
-  console.warn(`[bench-ci] Run: pnpm run bench -- --reporter=json --outputFile=${path.relative(ROOT, resultsPath)}`);
+  console.warn(
+    `[bench-ci] Run: pnpm run bench -- --reporter=json --outputFile=${path.relative(ROOT, resultsPath)}`,
+  );
   process.exit(0);
 }
 
@@ -123,17 +122,15 @@ for (const [name, { meanMs: baselineMean }] of Object.entries(baseline.benchmark
     regressionCount++;
     console.warn(
       `[bench-ci] WARNING  "${name}"\n` +
-      `           baseline=${baselineMean.toFixed(3)}ms  current=${current.toFixed(3)}ms  change=${direction}  (>${(REGRESSION_THRESHOLD * 100).toFixed(0)}% threshold)`,
+        `           baseline=${baselineMean.toFixed(3)}ms  current=${current.toFixed(3)}ms  change=${direction}  (>${(REGRESSION_THRESHOLD * 100).toFixed(0)}% threshold)`,
     );
   } else if (ratio < -0.1) {
     console.log(
       `[bench-ci] IMPROVED "${name}"\n` +
-      `           baseline=${baselineMean.toFixed(3)}ms  current=${current.toFixed(3)}ms  change=${direction}`,
+        `           baseline=${baselineMean.toFixed(3)}ms  current=${current.toFixed(3)}ms  change=${direction}`,
     );
   } else {
-    console.log(
-      `[bench-ci] OK       "${name}"  change=${direction}`,
-    );
+    console.log(`[bench-ci] OK       "${name}"  change=${direction}`);
   }
 }
 
@@ -143,7 +140,7 @@ console.log(`[bench-ci] Checked ${checkedCount} benchmarks`);
 if (regressionCount > 0) {
   console.warn(
     `[bench-ci] ${regressionCount} benchmark(s) regressed by >${(REGRESSION_THRESHOLD * 100).toFixed(0)}% — ` +
-    `update baselines with: pnpm run bench:update-baselines`,
+      `update baselines with: pnpm run bench:update-baselines`,
   );
 } else {
   console.log('[bench-ci] No regressions detected.');

@@ -22,7 +22,9 @@ const baselinePath = path.resolve(ROOT, 'tests/benchmarks/baselines.json');
 
 if (!fs.existsSync(resultsPath)) {
   console.error(`[update-baselines] Results file not found: ${resultsPath}`);
-  console.error('[update-baselines] Run: vitest bench --reporter=json --outputFile=bench-results.json');
+  console.error(
+    '[update-baselines] Run: vitest bench --reporter=json --outputFile=bench-results.json',
+  );
   process.exit(1);
 }
 
@@ -70,4 +72,6 @@ const baseline = {
 
 fs.writeFileSync(baselinePath, JSON.stringify(baseline, null, 2) + '\n', 'utf-8');
 
-console.log(`[update-baselines] Written ${Object.keys(benchmarks).length} baselines to ${path.relative(ROOT, baselinePath)}`);
+console.log(
+  `[update-baselines] Written ${Object.keys(benchmarks).length} baselines to ${path.relative(ROOT, baselinePath)}`,
+);

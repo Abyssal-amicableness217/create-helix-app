@@ -29,9 +29,15 @@
     "validation time > validate 500 valid project names": { "meanMs": 0.05 },
     "validation time > validate 500 invalid project names": { "meanMs": 0.03 },
     "validation time > validate single valid name (baseline micro)": { "meanMs": 0.0002 },
-    "config file parsing time > parse config from a temp .helixrc.json file (100 iterations)": { "meanMs": 3 },
-    "config file parsing time > parse config with profile selection (100 iterations)": { "meanMs": 3 },
-    "config file parsing time > parse config — noConfig path (no filesystem access)": { "meanMs": 0.01 },
+    "config file parsing time > parse config from a temp .helixrc.json file (100 iterations)": {
+      "meanMs": 3
+    },
+    "config file parsing time > parse config with profile selection (100 iterations)": {
+      "meanMs": 3
+    },
+    "config file parsing time > parse config — noConfig path (no filesystem access)": {
+      "meanMs": 0.01
+    },
     "config file parsing time > JSON.parse of full config string (baseline)": { "meanMs": 2 }
   }
 }
