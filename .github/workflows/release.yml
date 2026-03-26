@@ -56,11 +56,11 @@ jobs:
           curl -H "Content-Type: application/json" \
             -d '{
               "embeds": [{
-                "title": "create-helix-app released!",
-                "description": "A new version of `create-helix-app` has been published to npm!\n\n**Install:** `npm create helix-app`\n**npx:** `npx create-helix-app`",
+                "title": "create-helix released!",
+                "description": "A new version of `create-helix` has been published to npm!\n\n**Install:** `npm create helix`\n**npx:** `npx create-helix`",
                 "color": 5025616,
                 "fields": [
-                  { "name": "Package", "value": "[create-helix-app](https://www.npmjs.com/package/create-helix-app)", "inline": true },
+                  { "name": "Package", "value": "[create-helix](https://www.npmjs.com/package/create-helix)", "inline": true },
                   { "name": "Repository", "value": "[GitHub](https://github.com/bookedsolidtech/create-helix-app)", "inline": true }
                 ],
                 "footer": { "text": "Booked Solid - HELiX Ecosystem" },

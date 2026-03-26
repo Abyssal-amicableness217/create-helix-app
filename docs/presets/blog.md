@@ -26,7 +26,7 @@ Includes all [standard SDCs](./standard.md), plus:
 ## Usage
 
 ```bash
-npx create-helix-app --drupal --preset blog
+npx create-helix --drupal --preset blog
 ```
 
 ## Architecture Notes

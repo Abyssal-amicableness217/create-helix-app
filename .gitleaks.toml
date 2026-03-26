@@ -1,4 +1,4 @@
-title = "create-helix-app Gitleaks Configuration"
+title = "create-helix Gitleaks Configuration"
 
 [extend]
 useDefault = true

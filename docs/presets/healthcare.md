@@ -25,7 +25,7 @@ Includes all [blog SDCs](./blog.md) (which include all [standard SDCs](./standar
 ## Usage
 
 ```bash
-npx create-helix-app --drupal --preset healthcare
+npx create-helix --drupal --preset healthcare
 ```
 
 ## Architecture Notes

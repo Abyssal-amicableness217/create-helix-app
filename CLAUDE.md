@@ -1,8 +1,8 @@
-# CLAUDE.md -- create-helix-app
+# CLAUDE.md -- create-helix
 
 ## Project Overview
 
-`create-helix-app` is a TUI-powered CLI scaffolder for HELiX enterprise web component projects. It supports 8 framework targets and 4 Drupal presets.
+`create-helix` is a TUI-powered CLI scaffolder for HELiX enterprise web component projects. It supports 8 framework targets and 4 Drupal presets.
 
 ## Tech Stack
 

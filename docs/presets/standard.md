@@ -26,7 +26,7 @@ The standard preset provides the core SDC set for a general-purpose Drupal site.
 ## Usage
 
 ```bash
-npx create-helix-app --drupal --preset standard
+npx create-helix --drupal --preset standard
 ```
 
 ## Architecture Notes

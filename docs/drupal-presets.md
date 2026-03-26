@@ -1,15 +1,15 @@
 # Drupal Preset Guide
 
-`create-helix-app` supports Drupal theme scaffolding through presets. A preset selects a curated set of Single Directory Components (SDCs) appropriate for a given site architecture and generates a fully-structured Drupal theme directory.
+`create-helix` supports Drupal theme scaffolding through presets. A preset selects a curated set of Single Directory Components (SDCs) appropriate for a given site architecture and generates a fully-structured Drupal theme directory.
 
 ## Usage
 
 ```bash
 # Interactive — prompts for theme name and preset selection
-npx create-helix-app --drupal
+npx create-helix --drupal
 
 # Non-interactive — pass preset via flag
-npx create-helix-app --drupal --preset healthcare
+npx create-helix --drupal --preset healthcare
 ```
 
 ## Available Presets

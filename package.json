@@ -1,10 +1,10 @@
 {
-  "name": "create-helix-app",
+  "name": "create-helix",
   "version": "0.1.0",
   "description": "Scaffold a new project with HELiX web components — TUI-powered CLI",
   "type": "module",
   "bin": {
-    "create-helix-app": "./dist/index.js"
+    "create-helix": "./dist/index.js"
   },
   "files": [
     "dist"

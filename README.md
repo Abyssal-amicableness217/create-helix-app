@@ -1,11 +1,11 @@
-# create-helix-app
+# create-helix
 
 Scaffold a new project with [HELiX](https://github.com/bookedsolidtech/helix) enterprise web components. TUI-powered CLI with support for 8 framework targets and 4 Drupal presets.
 
 ## Quick Start
 
 ```bash
-npx create-helix-app
+npx create-helix
 ```
 
 Follow the interactive prompts to choose your framework, component bundles, and features.
@@ -13,13 +13,13 @@ Follow the interactive prompts to choose your framework, component bundles, and 
 ### Drupal Theme Scaffolding
 
 ```bash
-npx create-helix-app --drupal
+npx create-helix --drupal
 ```
 
 Or pass a preset directly:
 
 ```bash
-npx create-helix-app --drupal --preset healthcare
+npx create-helix --drupal --preset healthcare
 ```
 
 ## Supported Frameworks

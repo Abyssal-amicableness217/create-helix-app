@@ -44,7 +44,7 @@ function banner(): void {
 async function runDrupalCLI(presetArg: string | null): Promise<void> {
   banner();
 
-  p.intro(pc.bgCyan(pc.black(' create-helix-app — Drupal theme ')));
+  p.intro(pc.bgCyan(pc.black(' create-helix — Drupal theme ')));
 
   // Validate preset if provided via flag
   if (presetArg !== null && !isValidPreset(presetArg)) {
@@ -133,7 +133,7 @@ export async function runCLI(): Promise<void> {
 
   banner();
 
-  p.intro(pc.bgCyan(pc.black(' create-helix-app ')));
+  p.intro(pc.bgCyan(pc.black(' create-helix ')));
 
   const argName = process.argv[2];
 

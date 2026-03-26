@@ -25,7 +25,7 @@ Includes all [standard SDCs](./standard.md), plus:
 ## Usage
 
 ```bash
-npx create-helix-app --drupal --preset intranet
+npx create-helix --drupal --preset intranet
 ```
 
 ## Architecture Notes
