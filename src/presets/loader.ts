@@ -1,12 +1,7 @@
 import type { PresetConfig, DrupalPreset } from '../types.js';
+import { VALID_PRESETS } from '../validation.js';
 
-export const VALID_PRESETS: DrupalPreset[] = [
-  'standard',
-  'blog',
-  'healthcare',
-  'intranet',
-  'ecommerce',
-];
+export { VALID_PRESETS };
 
 export function isValidPreset(preset: string): preset is DrupalPreset {
   return VALID_PRESETS.includes(preset as DrupalPreset);

@@ -1,19 +1,7 @@
-export type Framework =
-  | 'react-next'
-  | 'react-vite'
-  | 'remix'
-  | 'vue-nuxt'
-  | 'vue-vite'
-  | 'solid-vite'
-  | 'qwik-vite'
-  | 'svelte-kit'
-  | 'angular'
-  | 'astro'
-  | 'vanilla'
-  | 'lit-vite'
-  | 'preact-vite'
-  | 'stencil'
-  | 'ember';
+import { VALID_FRAMEWORKS, VALID_PRESETS } from './validation.js';
+
+/** Derived from the canonical VALID_FRAMEWORKS array in validation.ts. */
+export type Framework = (typeof VALID_FRAMEWORKS)[number];
 
 export type ComponentBundle =
   | 'all'
@@ -79,7 +67,8 @@ export interface ComponentBundleConfig {
   components: string[];
 }
 
-export type DrupalPreset = 'standard' | 'blog' | 'healthcare' | 'intranet' | 'ecommerce';
+/** Derived from the canonical VALID_PRESETS array in validation.ts. */
+export type DrupalPreset = (typeof VALID_PRESETS)[number];
 
 export interface PresetConfig {
   id: DrupalPreset;
